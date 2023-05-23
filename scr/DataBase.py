@@ -18,10 +18,7 @@ class Commands():
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS lessons(
             user_id TEXT,
-            lesson1 TEXT,
-            lesson2 TEXT,
-            lesson3 TEXT,
-            lesson4 TEXT,
+            lesson TEXT
             )
         """)
         db.commit()
@@ -46,13 +43,13 @@ class Commands():
         self.db = sql.connect("../DataBaseTelegram.db")
         self.cursor = self.db.cursor()
         self.cursor.execute(f"""
-        SELECT * FROM lessons WHERE id=?
-        """, (user_id))
+        SELECT * FROM lessons WHERE user_id=? and lesson=?
+        """, (user_id, lesson_name))
 
         replay =self.cursor.fetchone()
 
         if not(replay):
             self.cursor.execute("""
-            INSERT INTO lessons (user_id, lesson1, lesson2, lesson3, lesson4) VALUES (?, ?, ?, ?, ?)
+            INSERT INTO lessons (user_id, lesson) VALUES (?, ?)
             """, (int(user_id), lesson_name))
             self.db.commit()
