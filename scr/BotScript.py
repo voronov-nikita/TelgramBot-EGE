@@ -32,12 +32,16 @@ class Bot():
         button5 = types.InlineKeyboardButton('Физика', callback_data=f'lesson.physics', switch_inline_query_current_chat='')
         button6 = types.InlineKeyboardButton('География', callback_data=f'lesson.geography', switch_inline_query_current_chat='')
 
-
         keyboard.add(button1, button2)
         keyboard.add(button3, button4)
         keyboard.add(button5, button6)
 
         self.bot.send_message(message.chat.id, "К какому экзамену вы готовитесь?", reply_markup=keyboard)
+
+
+    def create_keyboard_lessons_study(self, message):
+        user_id = message.from_user.id
+        self.data_base.search_data(user_id)
 
 
     def run(self):
@@ -56,11 +60,11 @@ class Bot():
             self.create_keyboard_lessons(message)
 
 
-        @self.bot.message_handler(commands=["add"], content_types=["text"])
+        @self.bot.message_handler(commands=["study"], content_types=["text"])
         def start_lesson_message(message):
             
             self.bot.send_message(message.chat.id, "ОК")
-            self.create_keyboard_lessons(message)
+            self.create_keyboard_lessons_study(message)
 
 
         # <------------ Listenning messages ------------>
